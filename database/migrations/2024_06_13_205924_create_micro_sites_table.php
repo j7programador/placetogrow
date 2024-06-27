@@ -12,10 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('micro_sites', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 30);
+            $table->string('slug', 30)->unique();
+            $table->string('name', 100);
+            $table->enum('document_type', array_column(\App\Constants\DocumentTypeEnum::cases(), 'name'));
+            $table->string('document', 30);
+            $table->foreignId('category_id')->constrained();
             $table->timestamp('enabled_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->string('img_url', 500)->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('micro_sites');
     }
 };
