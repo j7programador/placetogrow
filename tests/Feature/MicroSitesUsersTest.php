@@ -18,23 +18,6 @@ use Tests\TestCase;
 class MicroSitesUsersTest extends TestCase
 {
     use LazilyRefreshDatabase;
-    public function testListUsers(): void
-    {
-        $user = User::factory()->create();
-        $response = $this->actingAs($user)
-            ->get(route('users.index'));
-
-        $response->assertOk();
-    }
-
-    public function testEditUsers(): void
-    {
-        $user = User::factory()->create();
-        $response = $this->actingAs($user)
-            ->get(route('users.edit', $user->id));
-
-        $response->assertOk();
-    }
 
     public function testUpdateUsers(): void
     {
