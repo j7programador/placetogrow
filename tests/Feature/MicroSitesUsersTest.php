@@ -6,6 +6,7 @@ use App\Actions\Users\DeleteAction;
 use App\Actions\Users\UpdateAction;
 use App\Models\MicroSite;
 use App\Models\User;
+use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -16,6 +17,7 @@ use Tests\TestCase;
 
 class MicroSitesUsersTest extends TestCase
 {
+    use LazilyRefreshDatabase;
     public function testListUsers(): void
     {
         $user = User::factory()->create();
