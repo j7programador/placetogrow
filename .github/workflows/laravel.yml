@@ -20,7 +20,7 @@ jobs:
           php-version: 8.2
       - name: Copy .env
         run: |
-             cp .env.example .env
+             cp .env.cicd .env
       - name: Run Composer
         run: |
             composer install --no-interaction
