@@ -23,6 +23,7 @@ jobs:
       - name: Run Composer
         run: |
             composer install -n --prefer-dist
+        working-directory: ${{ github.workspace }}
       - name: Run test suite
         run: |
             php artisan test
