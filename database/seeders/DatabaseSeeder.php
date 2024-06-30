@@ -17,10 +17,23 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Tes User',
-            'email' => 'test@example.com',
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
             'password' => bcrypt('12345678'),
-            
+
         ]);
+
+        User::factory()->create([
+            'name' => 'Client User',
+            'email' => 'customer@example.com',
+            'password' => bcrypt('12345678'),
+
+        ]);
+
+        $this->call(MicroSiteSeeder::class);
+        $this->call(RolesSeeder::class);
+        $this->call(PermissionsSeeder::class);
+        $this->call(DefaultRolesAndPermissionsSeeder::class);
+
     }
 }

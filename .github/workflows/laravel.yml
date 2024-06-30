@@ -1,0 +1,53 @@
+name: PayMicro
+
+on:
+  push:
+    branches:
+     - develop
+     - feature/cicd
+
+  pull_request:
+    branches:
+      - develop
+jobs:
+  test:
+    name: run-test
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: laravel
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+
+      - name: Check PHP
+        run: php -v
+      - uses: actions/checkout@v2
+
+      - name: Copy .env
+        run: php -r"file_exists('.env') || copy('.env.example', '.env');"
+      - name: Run Composer
+        run: |
+            composer install -n --prefer-dist
+        working-directory: ${{ github.workspace }}
+
+      - name: Run npm
+        run: |
+          npm install
+      - name: Create database
+        run: |
+            touch database/database.sqlite
+      - name: Run test suite
+        run: |
+            php artisan test --group=testUser
+      - name: Run Script
+        run: echo 'Hola actions'
+
