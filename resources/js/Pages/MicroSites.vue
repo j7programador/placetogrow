@@ -20,6 +20,10 @@ const viewMicrosite = (id) => {
     router.visit(`/microsites/${id}`);
 };
 
+const viewPageMicrosite = (slug) => {
+    router.visit(route('microsites.viewMicroSite', slug));
+}
+
 const editMicrosite = (id) => {
     router.visit(`/microsites/${id}/edit`);
 };
@@ -94,6 +98,9 @@ const Actions = 'Actions';
                                 <template #content>
                                     <DropdownLink @click="viewMicrosite(microsite.id)" href="#">
                                         View
+                                    </DropdownLink>
+                                    <DropdownLink  :href="`/microsite/${microsite.slug}`">
+                                        View Microsite
                                     </DropdownLink>
                                     <DropdownLink v-if="canEdit" @click="editMicrosite(microsite.id)" href="#">
                                         Edit

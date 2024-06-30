@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\MicroSites\DeleteAction;
 use App\Constants\CategoriesEnum;
+use App\Constants\CurrencyEnum;
 use App\Constants\DocumentTypeEnum;
 use App\Constants\Permissions;
 use App\Constants\TypeMicrositeEnum;
@@ -113,6 +114,29 @@ class MicroSiteController extends Controller
     {
         $deleteAction->execute($id);
         return to_route('microsites.index')->with('success', 'Item eliminado con éxito');
+    }
+
+    public function viewMicrosite(string $slug): \Inertia\Response
+    {
+        $microsite = MicroSite::query()->where('slug', $slug)->first();
+        $micrositeType = $microsite->type_microsite;
+        $currencies = array_column(CurrencyEnum::cases(), 'name');
+        if($micrositeType == 'BASIC'){
+                return Inertia::render('Microsite/Basic', [
+                'microSite' => $microsite,
+                'currencies' => $currencies,
+            ]);
+        } else if($micrositeType == 'BILL'){
+                return Inertia::render('Microsite/Basic', [
+                    'microSite' => $microsite,
+                    'currencies' => $currencies,
+                ]);
+        }
+
+        return Inertia::render('Microsite/Suscription', [
+            'microSite' => $microsite,
+            'currencies' => $currencies,
+        ]);
     }
 
 }
