@@ -42,7 +42,9 @@ jobs:
       - name: Run npm
         run: |
           npm install
-
+      - name: Create database
+        run: |
+            touch database/database.sqlite
       - name: Run test suite
         run: |
             php artisan test
