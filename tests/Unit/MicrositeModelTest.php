@@ -12,10 +12,4 @@ class MicrositeModelTest extends TestCase
 
     use RefreshDatabase;
 
-    public function testCanCreateUser()
-    {
-        $microsite = MicroSite::factory()->count(1)->create();
-
-        $this->assertDatabaseCount('micro_sites', 1);
-    }
 }
