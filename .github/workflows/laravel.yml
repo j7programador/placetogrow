@@ -23,7 +23,7 @@ jobs:
             touch .env
       - name: Copy .env
         run: |
-             cp .env.cicd .env
+             cp .env.ci .env
       - name: Run Composer
         run: |
             composer install --no-interaction
