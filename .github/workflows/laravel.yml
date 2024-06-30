@@ -47,7 +47,7 @@ jobs:
             touch database/database.sqlite
       - name: Run test suite
         run: |
-            php artisan test --group=testUser
+            php artisan test --group=deleteActionUser
       - name: Run Script
         run: echo 'Hola actions'
 
