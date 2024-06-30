@@ -12,7 +12,11 @@ const form = useForm({
     email: '',
     password: '',
     password_confirmation: '',
+    role: '',
 });
+defineProps(
+    {roles: Array }
+)
 
 const submit = () => {
     form.post(route('register'), {
@@ -57,6 +61,14 @@ const submit = () => {
 
                     <InputError class="mt-2" :message="form.errors.email" />
                 </div>
+                <div>
+                    <InputLabel for="document_type" value="Role" />
+                    <select class = "cursor-pointer border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm w-40"
+                            id="document_type" v-model="form.role" required>
+                        <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
+                    </select>
+                    <InputError class="mt-2" :message="form.errors.role" />
+                </div>
 
                 <div class="mt-4">
                     <InputLabel for="password" value="Password" />
@@ -89,15 +101,8 @@ const submit = () => {
                 </div>
 
                 <div class="flex items-center justify-end mt-4">
-                    <Link
-                        :href="route('login')"
-                        class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                    >
-                        Already registered?
-                    </Link>
-
                     <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                        Register
+                        Create User
                     </PrimaryButton>
                 </div>
             </form>
