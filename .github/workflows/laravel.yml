@@ -32,14 +32,11 @@ jobs:
 
       - name: Run npm
         run: |
-          npm run install
+          npm install
 
       - name: Run test suite
         run: |
             php artisan test
       - name: Run Script
         run: echo 'Hola actions'
-      - name: Run npm
-        run: |
-            npm run install
 
