@@ -2,10 +2,7 @@
 
 import {Head, useForm} from '@inertiajs/vue3';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import TextInput from "@/Components/TextInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputError from "@/Components/InputError.vue";
 
 const props = defineProps(
     {microSite: Object}
@@ -57,7 +54,15 @@ const props = defineProps(
                     <p
                         class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300
                             focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500
-                            dark:focus:ring-indigo-600 rounded-md shadow-sm" >{{microSite.category_id}}</p>
+                            dark:focus:ring-indigo-600 rounded-md shadow-sm" >{{microSite.category}}</p>
+
+                </div>
+                <div>
+                    <InputLabel for="name" value="Type" />
+                    <p
+                        class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300
+                            focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500
+                            dark:focus:ring-indigo-600 rounded-md shadow-sm" >{{microSite.type_microsite}}</p>
 
                 </div>
             </div>

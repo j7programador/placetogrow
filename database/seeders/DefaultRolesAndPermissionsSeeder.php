@@ -24,6 +24,13 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
                     Permissions::MICROSITE_EDIT,
                     Permissions::MICROSITE_DELETE,
                     Permissions::MICROSITE_CREATE,
+                    Permissions::USER_CREATE,
+                    Permissions::USER_EDIT,
+                    Permissions::USER_DELETE,
+                    Permissions::USER_VIEW,
+                    Permissions::ROLE_EDIT,
+                    Permissions::ROLE_VIEW,
+                    Permissions::DASHBOARD_VIEW
                 ],
             ],
             [

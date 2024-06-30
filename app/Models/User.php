@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,5 +43,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getRole(int $id) : string {
+
+        $user = User::query()->where('id', $id)->find($id);
+
+        if($user->hasRole('Admin')) {
+            return 'Admin';
+        } else if($user->hasRole('Customer')) {
+            return 'Customer';
+        }
+
+        return '';
     }
 }

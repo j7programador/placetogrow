@@ -2,8 +2,11 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 
-const props = defineProps(
-    {canCreate : Boolean}
+const props = defineProps({
+        canViewDashBoard : Boolean,
+        canViewUsers: Boolean,
+        canViewRoles: Boolean,
+    }
 )
 </script>
 

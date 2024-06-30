@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Actions\MicroSites\DeleteAction;
+use App\Constants\CategoriesEnum;
 use App\Constants\DocumentTypeEnum;
 use App\Constants\Permissions;
+use App\Constants\TypeMicrositeEnum;
+use App\Models\Category;
 use App\Models\MicroSite;
 use App\Http\Requests\StoreMicroSiteRequest;
 use App\Http\Requests\UpdateMicroSiteRequest;
@@ -20,6 +23,10 @@ class MicroSiteController extends Controller
             'microsites' => MicroSite::all(),
             'canEdit' => auth()->user()->can(Permissions::MICROSITE_EDIT),
             'canCreate' => auth()->user()->can(Permissions::MICROSITE_CREATE),
+            'canDelete' => auth()->user()->can(Permissions::MICROSITE_DELETE),
+            'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
+            'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
+            'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
         ]);
     }
 
@@ -28,6 +35,11 @@ class MicroSiteController extends Controller
     {
         return Inertia::render('Microsite/Create', [
             'documentTypes' => array_column(DocumentTypeEnum::cases(), 'name'),
+            'categories' => array_column(CategoriesEnum::cases(), 'name'),
+            'micrositeTypes' => array_column(TypeMicrositeEnum::cases(), 'name'),
+            'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
+            'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
+            'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
         ]);
     }
 
@@ -39,7 +51,8 @@ class MicroSiteController extends Controller
             'name' => 'required|max:100',
             'document_type' => 'required',
             'document' => 'required|max:30',
-            'category_id' => 'required|exists:categories,id',
+            'category' => 'required',
+            'type_microsite' => 'required',
             'img_url' => 'nullable|url|max:500',
         ]);
 
@@ -54,7 +67,10 @@ class MicroSiteController extends Controller
     public function show(int $id): \Inertia\Response
     {
         return Inertia::render('Microsite/View', [
-            'microSite' => MicroSite::query()->where('id', $id)->find($id)
+            'microSite' => MicroSite::query()->where('id', $id)->find($id),
+            'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
+            'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
+            'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
         ]);
     }
 
@@ -64,6 +80,11 @@ class MicroSiteController extends Controller
         return Inertia::render('Microsite/Edit', [
             'microSite' => MicroSite::query()->where('id', $id)->find($id),
             'documentTypes' => array_column(DocumentTypeEnum::cases(), 'name'),
+            'categories' => array_column(CategoriesEnum::cases(), 'name'),
+            'micrositeTypes' => array_column(TypeMicrositeEnum::cases(), 'name'),
+            'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
+            'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
+            'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
         ]);
 
     }
@@ -76,7 +97,8 @@ class MicroSiteController extends Controller
             'name' => 'required|string|max:100',
             'document_type' => 'required|in:' . implode(',', array_column(\App\Constants\DocumentTypeEnum::cases(), 'name')),
             'document' => 'required|string|max:30',
-            'category_id' => 'required|exists:categories,id',
+            'category' => 'required',
+            'type_microsite' => 'required',
             'img_url' => 'nullable|url|max:500',
         ]);
 
@@ -92,4 +114,5 @@ class MicroSiteController extends Controller
         $deleteAction->execute($id);
         return to_route('microsites.index')->with('success', 'Item eliminado con éxito');
     }
+
 }

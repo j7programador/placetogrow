@@ -10,7 +10,10 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 const props = defineProps(
     {microSite: Object,
-           documentTypes: Array},
+           documentTypes: Array,
+           categories: Array,
+           micrositeTypes: Array,
+    },
 );
 
 const form = useForm({
@@ -18,7 +21,8 @@ const form = useForm({
     name: props.microSite.name,
     document_type: props.microSite.document_type,
     document: props.microSite.document,
-    category_id: props.microSite.category_id,
+    category: props.microSite.category,
+    type_microsite: props.microSite.type_microsite,
     img_url: props.microSite.img_url || '',
 });
 
@@ -94,9 +98,20 @@ const submit = () => {
                     </div>
 
                     <div>
-                        <InputLabel for="category_id" value="Category"/>
-                        <TextInput type="number" id="category_id" v-model="form.category_id" required/>
-                        <InputError class="mt-2" :message="form.errors.category_id" />
+                        <InputLabel for="category" value="Category" />
+                        <select class = "border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                id="category" v-model="form.category" required>
+                            <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
+                        </select>
+                        <InputError class="mt-2" :message="form.errors.category" />
+                    </div>
+                    <div>
+                        <InputLabel for="type_microsite" value="Type" />
+                        <select class = "border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
+                                id="category" v-model="form.type_microsite" required>
+                            <option v-for="type_microsite in micrositeTypes" :key="type_microsite" :value="type_microsite">{{ type_microsite }}</option>
+                        </select>
+                        <InputError class="mt-2" :message="form.errors.category" />
                     </div>
 
                     <div>

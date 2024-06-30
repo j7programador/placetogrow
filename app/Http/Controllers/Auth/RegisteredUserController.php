@@ -24,7 +24,10 @@ class RegisteredUserController extends Controller
     {
         return Inertia::render('Auth/Register', [
                 'canCreate' => auth()->user()->can(Permissions::MICROSITE_CREATE),
-                'roles' => Roles::toArray()
+                'roles' => Roles::toArray(),
+                'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
+                'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
+                'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
             ]
         );
     }

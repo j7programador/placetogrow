@@ -14,7 +14,8 @@ class MicroSite extends Model
         'name',
         'document_type',
         'document',
-        'category_id',
+        'category',
+        'type_microsite',
         'enabled_at',
         'img_url',
     ];
