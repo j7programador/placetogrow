@@ -18,6 +18,9 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
+      - name: Touch .env
+        run: |
+            touch .env
       - name: Copy .env
         run: |
              cp .env.cicd .env
