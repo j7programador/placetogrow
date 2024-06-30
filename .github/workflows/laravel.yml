@@ -29,9 +29,17 @@ jobs:
         run: |
             composer install -n --prefer-dist
         working-directory: ${{ github.workspace }}
+
+      - name: Run npm
+        run: |
+          npm run install
+
       - name: Run test suite
         run: |
             php artisan test
       - name: Run Script
         run: echo 'Hola actions'
+      - name: Run npm
+        run: |
+            npm run install
 
