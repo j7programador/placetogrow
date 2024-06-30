@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Constants\Permissions;
-use App\Models\Category;
-use App\Models\MicroSite;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -12,23 +10,23 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
-class MicroSitesIndexTest extends TestCase
+class RoleControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
 
-    public function testListMicroSites(): void
+    public function test_index_method()
     {
         $user = User::factory()->create();
         $baseRolesPersmission = [
             [
                 'name' => 'Admin',
                 'permissions' => [
-                    Permissions::MICROSITE_VIEW,
+                    Permissions::MICROSITE_CREATE,
                 ],
             ],
         ];
         Permission::query()->create([
-            'name' => Permissions::MICROSITE_VIEW,
+            'name' => Permissions::MICROSITE_CREATE,
         ]);
 
         foreach ($baseRolesPersmission as $role) {
@@ -37,16 +35,17 @@ class MicroSitesIndexTest extends TestCase
             $rol->syncPermissions($role['permissions']);
         }
         $user->assignRole('Admin');
-        $response = $this->actingAs($user)
-                        ->get(route('microsites.index'));
+        $user = User::factory()->create();
 
-        $response->assertOk();
+        $this->actingAs($user);
+
+        $roles = Role::query()->create(
+            ['name'=>'admin']
+        );
+
+        $response = $this->get('/roles');
+
+        $response->assertStatus(200);
     }
 
-    public function testAnUnauthenticatedUserCannotViewListSites(): void
-    {
-        $response = $this->get(route('microsites.index'));
-
-        $response->assertStatus(403);
-    }
 }

@@ -38,7 +38,7 @@ Route::get('/microsites/create', [\App\Http\Controllers\MicroSiteController::cla
     ->middleware(['auth', 'verified', 'can:microsite_create'])->name('microsites.create');
 
 Route::post('/microsites/create', [\App\Http\Controllers\MicrositeController::class, 'store'])
-    ->middleware(['auth', 'verified'])->name('microsites.store');
+    ->middleware(['auth', 'verified', 'can:microsite_create'])->name('microsites.store');
 
 Route::get('/microsites/{id}/edit', [\App\Http\Controllers\MicrositeController::class, 'edit'])
     ->middleware(['auth', 'verified'])->name('microsites.edit');

@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Users\DeleteAction;
+use App\Actions\Users\UpdateAction;
 use App\Constants\Permissions;
 use App\Constants\Roles;
-use App\Http\Requests\ProfileUpdateRequest;
-use App\Models\MicroSite;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
@@ -41,21 +39,20 @@ class UserController extends Controller
             'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
         ]);
     }
-    public function update(int $id, Request $request): RedirectResponse
+    public function update(int $id, UpdateAction $updateAction, Request $request): RedirectResponse
     {
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
         $user = User::query()->where('id', $id)->first();
-        $user->save($request->all());
-        $user->syncRoles([]);
-        $user->assignRole($request->role);
+        $updateAction->execute($user, $request);
+
         return to_route('users.index')->with('success', 'User updated successfully.');
     }
 
     public function destroy(int $id, DeleteAction $deleteAction): \Illuminate\Http\RedirectResponse
     {
         $deleteAction->execute($id);
-        return to_route('users.index')->with('success', 'Usuario eliminado con éxito');
+        return to_route('users.index')->with('success', 'User deleted');
     }
 }
