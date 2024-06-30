@@ -4,17 +4,20 @@ use App\Constants\Permissions;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevokePermissionFromRoleController;
 use App\Http\Controllers\RoleController;
+use App\Models\MicroSite;
+use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
+        'microsites' => MicroSite::all(),
         'canLogin' => Route::has('login'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
 
 
 Route::get('/dashboard', function () {
@@ -22,6 +25,11 @@ Route::get('/dashboard', function () {
         'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
         'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
         'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
+        'microsites' => MicroSite::count(),
+        'users' => User::count(),
+        'micrositesBasic' => Microsite::query()->where('type_microsite', 'BASIC')->count(),
+        'micrositesBill' => Microsite::query()->where('type_microsite', 'BILL')->count(),
+        'micrositesSuscription' => Microsite::query()->where('type_microsite', 'SUSCRIPTION')->count(),
     ]);
 })->middleware(['auth', 'verified', 'can:dashboard-view'])->name('dashboard');
 
@@ -51,6 +59,9 @@ Route::delete('/microsites/{id}', [\App\Http\Controllers\MicroSiteController::cl
 
 Route::get('/microsites/{id}', [\App\Http\Controllers\MicroSiteController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('microsites.view');
+
+Route::get('/microsite/{slug}', [\App\Http\Controllers\MicroSiteController::class, 'viewMicrosite'])
+    ->name('microsites.viewMicroSite');
 
 Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('users.index');
