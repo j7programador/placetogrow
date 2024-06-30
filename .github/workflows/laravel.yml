@@ -42,12 +42,9 @@ jobs:
       - name: Run npm
         run: |
           npm install
-      - name: Create database
-        run: |
-            touch database/database.sqlite
       - name: Run test suite
         run: |
-            php artisan test --group=testUser
+            php artisan test --group=testExample
       - name: Run Script
         run: echo 'Hola actions'
 
