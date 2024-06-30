@@ -18,6 +18,15 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
+      - name: Copy .env
+        run: |
+             cp .env.example .env
+      - name: Run Composer
+        run: |
+            composer install --no-interaction
+      - name: Run test suite
+        run: |
+            php artisan test
       - name: Run Script
         run: echo 'Hola actions'
 
