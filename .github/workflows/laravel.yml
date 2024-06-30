@@ -22,7 +22,7 @@ jobs:
         run: php -r"file_exists('.env') || copy('.env.example', '.env');"
       - name: Run Composer
         run: |
-            composer install --n --prefer-dist
+            composer install -n --prefer-dist
       - name: Run test suite
         run: |
             php artisan test
