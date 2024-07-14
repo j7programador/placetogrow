@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Constants\Permissions;
+use App\Constants\Roles;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -20,7 +22,14 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Auth/Register');
+        return Inertia::render('Auth/Register', [
+                'canCreate' => auth()->user()->can(Permissions::MICROSITE_CREATE),
+                'roles' => Roles::toArray(),
+                'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
+                'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
+                'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
+            ]
+        );
     }
 
     /**
@@ -34,6 +43,7 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => 'required',
         ]);
 
         $user = User::create([
@@ -42,10 +52,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+        $user->assignRole($request->role);
 
-        Auth::login($user);
-
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('users.index', absolute: false));
     }
 }
