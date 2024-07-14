@@ -35,4 +35,14 @@ class RoleController extends Controller
             'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
         ]);
     }
+
+    public function update(CreateRoleRequest $request, string $id)
+    {
+        $role = Role::findById($id);
+        $role->update([
+            'name' => $request->name
+        ]);
+        $role->syncPermissions($request->input('permissions.*.name'));
+        return back();
+    }
 }

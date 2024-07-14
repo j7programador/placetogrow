@@ -27,8 +27,10 @@ const submit = () => {
 
 <template>
     <AuthenticatedLayout>
-        <GuestLayout>
-            <Head title="Register" />
+
+        <Head title="Register" />
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Create User</h2>
 
             <form @submit.prevent="submit">
                 <div>
@@ -106,6 +108,6 @@ const submit = () => {
                     </PrimaryButton>
                 </div>
             </form>
-        </GuestLayout>
+        </template>
     </AuthenticatedLayout>
 </template>
