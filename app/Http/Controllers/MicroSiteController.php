@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\MicroSites\DeleteAction;
+use App\Actions\MicroSites\StoreAction;
+use App\Actions\MicroSites\UpdateAction;
 use App\Constants\CategoriesEnum;
 use App\Constants\CurrencyEnum;
 use App\Constants\DocumentTypeEnum;
@@ -12,13 +14,16 @@ use App\Models\Category;
 use App\Models\MicroSite;
 use App\Http\Requests\StoreMicroSiteRequest;
 use App\Http\Requests\UpdateMicroSiteRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Session\Store;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class MicroSiteController extends Controller
 {
 
-    public function index(): \Inertia\Response
+    public function index(): Response
     {
         return Inertia::render('MicroSites', [
             'microsites' => MicroSite::all(),
@@ -32,7 +37,7 @@ class MicroSiteController extends Controller
     }
 
 
-    public function create() : \Inertia\Response
+    public function create() : Response
     {
         return Inertia::render('Microsite/Create', [
             'documentTypes' => array_column(DocumentTypeEnum::cases(), 'name'),
@@ -45,27 +50,15 @@ class MicroSiteController extends Controller
     }
 
 
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(StoreAction $storeAction, Request $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'slug' => 'required|unique:micro_sites,slug|max:30',
-            'name' => 'required|max:100',
-            'document_type' => 'required',
-            'document' => 'required|max:30',
-            'category' => 'required',
-            'type_microsite' => 'required',
-            'img_url' => 'nullable|url|max:500',
-        ]);
-
-        $microsite = new MicroSite();
-        $microsite->fill($validated);
-        $microsite->save();
+        $storeAction -> execute($storeAction, $request);
 
         return to_route('microsites.index')->with('success', 'Microsite created successfully.');
     }
 
 
-    public function show(int $id): \Inertia\Response
+    public function show(int $id): Response
     {
         return Inertia::render('Microsite/View', [
             'microSite' => MicroSite::query()->where('id', $id)->find($id),
@@ -76,7 +69,7 @@ class MicroSiteController extends Controller
     }
 
 
-    public function edit(int $id): \Inertia\Response
+    public function edit(int $id): Response
     {
         return Inertia::render('Microsite/Edit', [
             'microSite' => MicroSite::query()->where('id', $id)->find($id),
@@ -91,32 +84,21 @@ class MicroSiteController extends Controller
     }
 
 
-    public function update(UpdateMicroSiteRequest $request, int $id): \Illuminate\Http\RedirectResponse
+    public function update(UpdateAction $updateAction, UpdateMicroSiteRequest $request, int $id): RedirectResponse
     {
-        $request->validate([
-            'slug' => 'required|string|max:30',
-            'name' => 'required|string|max:100',
-            'document_type' => 'required|in:' . implode(',', array_column(\App\Constants\DocumentTypeEnum::cases(), 'name')),
-            'document' => 'required|string|max:30',
-            'category' => 'required',
-            'type_microsite' => 'required',
-            'img_url' => 'nullable|url|max:500',
-        ]);
-
-        $microSite = MicroSite::query()->where('id', $id)->first();
-        $microSite->update($request->all());
+        $updateAction->execute($request, $id);
         return to_route('microsites.index')->with('success', 'Micro Site updated successfully.');
 
     }
 
 
-    public function destroy(int $id, DeleteAction $deleteAction): \Illuminate\Http\RedirectResponse
+    public function destroy(int $id, DeleteAction $deleteAction): RedirectResponse
     {
         $deleteAction->execute($id);
         return to_route('microsites.index')->with('success', 'Item eliminado con éxito');
     }
 
-    public function viewMicrosite(string $slug): \Inertia\Response
+    public function viewMicrosite(string $slug): Response
     {
         $microsite = MicroSite::query()->where('slug', $slug)->first();
         $micrositeType = $microsite->type_microsite;

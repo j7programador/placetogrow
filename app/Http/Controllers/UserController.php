@@ -14,7 +14,7 @@ use Inertia\Response;
 
 class UserController extends Controller
 {
-    public function index(Request $request): \Inertia\Response
+    public function index(Request $request): Response
     {
         return Inertia::render('Users', [
             'users' => User::all(),
@@ -50,7 +50,7 @@ class UserController extends Controller
         return to_route('users.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy(int $id, DeleteAction $deleteAction): \Illuminate\Http\RedirectResponse
+    public function destroy(int $id, DeleteAction $deleteAction): RedirectResponse
     {
         $deleteAction->execute($id);
         return to_route('users.index')->with('success', 'User deleted');
