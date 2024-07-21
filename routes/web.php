@@ -4,6 +4,7 @@ use App\Constants\Permissions;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RevokePermissionFromRoleController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CategoryController;
 use App\Models\MicroSite;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -78,6 +79,9 @@ Route::delete('/users/{id}', [\App\Http\Controllers\UserController::class, 'dest
 Route::middleware(['can:microsite_create'])->group(function () {
     Route::resource('/roles', RoleController::class);
 });
+
+Route::resource('categories', CategoryController::class)
+    ->middleware(['auth', 'verified', 'can:microsite_create'])->names('categories');
 
 
 

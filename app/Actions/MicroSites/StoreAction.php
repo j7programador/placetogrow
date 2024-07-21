@@ -14,7 +14,7 @@ class StoreAction
             'name' => 'required|max:100',
             'document_type' => 'required',
             'document' => 'required|max:30',
-            'category' => 'required',
+            'category_id' => 'required',
             'type_microsite' => 'required',
             'img_url' => 'nullable|url|max:500',
         ]);

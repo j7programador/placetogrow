@@ -5,7 +5,9 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 
 const props = defineProps(
-    {microSite: Object}
+    { microSite: Object,
+            category: Object
+          }
 );
 
 </script>
@@ -54,7 +56,7 @@ const props = defineProps(
                     <p
                         class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300
                             focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500
-                            dark:focus:ring-indigo-600 rounded-md shadow-sm" >{{microSite.category}}</p>
+                            dark:focus:ring-indigo-600 rounded-md shadow-sm" >{{category.name}}</p>
 
                 </div>
                 <div>

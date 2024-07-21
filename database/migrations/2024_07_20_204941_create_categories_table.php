@@ -12,16 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('micro_sites', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('slug', 30)->unique();
-            $table->string('name', 100)->unique();
-            $table->enum('document_type', array_column(\App\Constants\DocumentTypeEnum::cases(), 'name'));
-            $table->string('document', 30);
-            $table->foreignId('category_id')->constrained();
-            $table->enum('type_microsite', array_column(\App\Constants\TypeMicrositeEnum::cases(), 'name'));
+            $table->string('name', 30);
             $table->timestamp('enabled_at')->nullable()->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->string('img_url', 500)->nullable();
             $table->timestamps();
         });
     }
@@ -29,5 +23,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('micro_sites');
+        Schema::dropIfExists('categories');
     }
 };

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\MicroSites\DeleteAction;
 use App\Actions\MicroSites\StoreAction;
 use App\Actions\MicroSites\UpdateAction;
-use App\Constants\CategoriesEnum;
+use App\Constants\CategoryName;
 use App\Constants\CurrencyEnum;
 use App\Constants\DocumentTypeEnum;
 use App\Constants\Permissions;
@@ -41,7 +41,7 @@ class MicroSiteController extends Controller
     {
         return Inertia::render('Microsite/Create', [
             'documentTypes' => array_column(DocumentTypeEnum::cases(), 'name'),
-            'categories' => array_column(CategoriesEnum::cases(), 'name'),
+            'categories' => Category::query()->select(['id', 'name'])->get(),
             'micrositeTypes' => array_column(TypeMicrositeEnum::cases(), 'name'),
             'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
             'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
@@ -60,8 +60,11 @@ class MicroSiteController extends Controller
 
     public function show(int $id): Response
     {
+        $microsite = MicroSite::query()->where('id', $id)->find($id);
+
         return Inertia::render('Microsite/View', [
-            'microSite' => MicroSite::query()->where('id', $id)->find($id),
+            'microSite' => $microsite,
+            'category' => Category::query()->where('id', $microsite->category_id)->find($microsite->category_id),
             'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
             'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
             'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
@@ -74,7 +77,7 @@ class MicroSiteController extends Controller
         return Inertia::render('Microsite/Edit', [
             'microSite' => MicroSite::query()->where('id', $id)->find($id),
             'documentTypes' => array_column(DocumentTypeEnum::cases(), 'name'),
-            'categories' => array_column(CategoriesEnum::cases(), 'name'),
+            'categories' => Category::query()->select(['id', 'name'])->get(),
             'micrositeTypes' => array_column(TypeMicrositeEnum::cases(), 'name'),
             'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
             'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
@@ -95,7 +98,7 @@ class MicroSiteController extends Controller
     public function destroy(int $id, DeleteAction $deleteAction): RedirectResponse
     {
         $deleteAction->execute($id);
-        return to_route('microsites.index')->with('success', 'Item eliminado con éxito');
+        return to_route('microsites.index')->with('danger', 'Microsite deleted successfully');
     }
 
     public function viewMicrosite(string $slug): Response
