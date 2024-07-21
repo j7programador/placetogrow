@@ -14,7 +14,7 @@ class UpdateAction
             'name' => 'required|string|max:100',
             'document_type' => 'required|in:' . implode(',', array_column(\App\Constants\DocumentTypeEnum::cases(), 'name')),
             'document' => 'required|string|max:30',
-            'category' => 'required',
+            'category_id' => 'required',
             'type_microsite' => 'required',
             'img_url' => 'nullable|url|max:500',
         ]);
