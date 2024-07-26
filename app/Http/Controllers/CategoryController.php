@@ -64,7 +64,7 @@ class CategoryController extends Controller
 
     }
 
-    public function destroy(int $id, DeleteAction $deleteAction): RedirectResponse
+    public function destroy(int $id): RedirectResponse
     {
 
         $microsite = MicroSite::query()->where('category_id', $id)->first($id);
