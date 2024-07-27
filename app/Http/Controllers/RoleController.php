@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Constants\Permissions;
 use App\Http\Requests\CreateRoleRequest;
-use App\Http\Resources\PermissionResource;
-use App\Http\Resources\RoleResource;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+
 class RoleController extends Controller
 {
     public function index(): Response
@@ -27,6 +25,7 @@ class RoleController extends Controller
     {
         $role = Role::findById($id);
         $role->load('permissions');
+
         return Inertia::render('Roles/Edit', [
             'role' => $role,
             'permissions' => Permission::all(),
@@ -40,9 +39,10 @@ class RoleController extends Controller
     {
         $role = Role::findById($id);
         $role->update([
-            'name' => $request->name
+            'name' => $request->name,
         ]);
         $role->syncPermissions($request->input('permissions.*.name'));
+
         return back();
     }
 }

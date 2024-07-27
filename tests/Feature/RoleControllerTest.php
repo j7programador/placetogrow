@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Constants\Permissions;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -40,12 +39,11 @@ class RoleControllerTest extends TestCase
         $this->actingAs($user);
 
         $roles = Role::query()->create(
-            ['name'=>'admin']
+            ['name' => 'admin']
         );
 
         $response = $this->get('/roles');
 
         $response->assertStatus(200);
     }
-
 }

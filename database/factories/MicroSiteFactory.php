@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Constants\CategoryName;
 use App\Constants\DocumentTypeEnum;
 use App\Constants\TypeMicrositeEnum;
 use App\Models\Category;
@@ -13,7 +12,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class MicroSiteFactory extends Factory
 {
-
     public function definition(): array
     {
         return [

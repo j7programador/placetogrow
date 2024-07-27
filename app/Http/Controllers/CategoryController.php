@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Categories\StoreAction;
 use App\Actions\Categories\UpdateAction;
-use App\Constants\DocumentTypeEnum;
 use App\Constants\Permissions;
-use App\Constants\TypeMicrositeEnum;
 use App\Http\Requests\UpdateMicroSiteRequest;
 use App\Models\Category;
 use App\Models\MicroSite;
@@ -31,7 +29,7 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function create() : Response
+    public function create(): Response
     {
         return Inertia::render('Categories/Create', [
             'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
@@ -42,7 +40,8 @@ class CategoryController extends Controller
 
     public function store(StoreAction $storeAction, Request $request): RedirectResponse
     {
-        $storeAction -> execute($request);
+        $storeAction->execute($request);
+
         return to_route('categories.index')->with('success', 'Category created successfully.');
     }
 
@@ -59,7 +58,8 @@ class CategoryController extends Controller
 
     public function update(UpdateAction $updateAction, UpdateMicroSiteRequest $request, int $id): RedirectResponse
     {
-        $updateAction ->execute($request, $id);
+        $updateAction->execute($request, $id);
+
         return to_route('categories.index')->with('success', 'Category updated successfully.');
 
     }
@@ -69,11 +69,11 @@ class CategoryController extends Controller
 
         $microsite = MicroSite::query()->where('category_id', $id)->first($id);
 
-        if($microsite != null) {
+        if ($microsite != null) {
             return to_route('categories.index')->with('danger', 'There are microsites created with this category');
         }
         Category::destroy($id);
+
         return to_route('categories.index')->with('danger', 'Category deleted successfully');
     }
-
 }

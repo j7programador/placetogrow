@@ -4,20 +4,17 @@ namespace Tests\Feature;
 
 use App\Actions\Users\DeleteAction;
 use App\Actions\Users\UpdateAction;
-use App\Models\MicroSite;
 use App\Models\User;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
  * @group testUser
  */
-
 class MicroSitesUsersTest extends TestCase
 {
     use LazilyRefreshDatabase;
+
     public function testListUsers(): void
     {
         $user = User::factory()->create();
@@ -63,7 +60,7 @@ class MicroSitesUsersTest extends TestCase
         $this->actingAs($user);
         $response = $this->from(route('users.edit', $user->id))
             ->put(route('users.update', $user->id), [
-                'name' => ''
+                'name' => '',
             ]);
 
         $response->assertRedirect(route('users.edit', $user->id));

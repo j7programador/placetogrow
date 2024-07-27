@@ -19,7 +19,7 @@ class StoreAction
             'img_url' => 'nullable|url|max:500',
         ]);
 
-        $microsite = new MicroSite();
+        $microsite = new MicroSite;
         $microsite->fill($validated);
         $microsite->save();
     }

@@ -4,7 +4,6 @@ namespace App\Actions\Categories;
 
 use App\Http\Requests\UpdateMicroSiteRequest;
 use App\Models\Category;
-use App\Models\MicroSite;
 
 class UpdateAction
 {

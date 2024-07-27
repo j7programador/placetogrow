@@ -12,7 +12,7 @@ class UpdateAction
         $request->validate([
             'slug' => 'required|string|max:30',
             'name' => 'required|string|max:100',
-            'document_type' => 'required|in:' . implode(',', array_column(\App\Constants\DocumentTypeEnum::cases(), 'name')),
+            'document_type' => 'required|in:'.implode(',', array_column(\App\Constants\DocumentTypeEnum::cases(), 'name')),
             'document' => 'required|string|max:30',
             'category_id' => 'required',
             'type_microsite' => 'required',

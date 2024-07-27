@@ -3,10 +3,7 @@
 namespace Tests\Feature;
 
 use App\Constants\Permissions;
-use App\Models\MicroSite;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Tests\TestCase;
@@ -43,7 +40,8 @@ class MicroSitesIndexStoreTest extends TestCase
         $response->assertOk();
     }
 
-    public function testFailedFormMicrositesIndex(): void {
+    public function testFailedFormMicrositesIndex(): void
+    {
         $response = $this->get(route('microsites.create'));
 
         $response->assertRedirect(route('login'));
