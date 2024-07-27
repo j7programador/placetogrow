@@ -12,6 +12,8 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
     use HasRoles;
 
+    public mixed $name;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -32,6 +34,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
 
     /**
      * Get the attributes that should be cast.
