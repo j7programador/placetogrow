@@ -2,7 +2,6 @@
 
 namespace App\Actions\Categories;
 
-
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,7 +13,7 @@ class StoreAction
             'name' => 'required|max:100',
         ]);
 
-        $category = new Category();
+        $category = new Category;
         $category->fill($validated);
         $category->save();
     }

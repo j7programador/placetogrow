@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Constants\Permissions;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
@@ -30,7 +29,7 @@ class DefaultRolesAndPermissionsSeeder extends Seeder
                     Permissions::USER_VIEW,
                     Permissions::ROLE_EDIT,
                     Permissions::ROLE_VIEW,
-                    Permissions::DASHBOARD_VIEW
+                    Permissions::DASHBOARD_VIEW,
                 ],
             ],
             [

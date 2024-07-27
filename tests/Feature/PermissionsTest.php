@@ -3,26 +3,24 @@
 namespace Tests\Feature;
 
 use App\Constants\Permissions;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class PermissionsTest extends TestCase
 {
     public function test_constants_are_defined()
     {
-        $this->assertTrue(defined(Permissions::class . '::MICROSITE_VIEW'));
-        $this->assertTrue(defined(Permissions::class . '::MICROSITE_ANY'));
-        $this->assertTrue(defined(Permissions::class . '::MICROSITE_EDIT'));
-        $this->assertTrue(defined(Permissions::class . '::MICROSITE_DELETE'));
-        $this->assertTrue(defined(Permissions::class . '::MICROSITE_CREATE'));
-        $this->assertTrue(defined(Permissions::class . '::USER_CREATE'));
-        $this->assertTrue(defined(Permissions::class . '::USER_EDIT'));
-        $this->assertTrue(defined(Permissions::class . '::USER_DELETE'));
-        $this->assertTrue(defined(Permissions::class . '::USER_VIEW'));
-        $this->assertTrue(defined(Permissions::class . '::ROLE_VIEW'));
-        $this->assertTrue(defined(Permissions::class . '::ROLE_EDIT'));
-        $this->assertTrue(defined(Permissions::class . '::DASHBOARD_VIEW'));
+        $this->assertTrue(defined(Permissions::class.'::MICROSITE_VIEW'));
+        $this->assertTrue(defined(Permissions::class.'::MICROSITE_ANY'));
+        $this->assertTrue(defined(Permissions::class.'::MICROSITE_EDIT'));
+        $this->assertTrue(defined(Permissions::class.'::MICROSITE_DELETE'));
+        $this->assertTrue(defined(Permissions::class.'::MICROSITE_CREATE'));
+        $this->assertTrue(defined(Permissions::class.'::USER_CREATE'));
+        $this->assertTrue(defined(Permissions::class.'::USER_EDIT'));
+        $this->assertTrue(defined(Permissions::class.'::USER_DELETE'));
+        $this->assertTrue(defined(Permissions::class.'::USER_VIEW'));
+        $this->assertTrue(defined(Permissions::class.'::ROLE_VIEW'));
+        $this->assertTrue(defined(Permissions::class.'::ROLE_EDIT'));
+        $this->assertTrue(defined(Permissions::class.'::DASHBOARD_VIEW'));
     }
 
     public function test_toArray_method()

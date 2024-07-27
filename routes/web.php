@@ -1,10 +1,9 @@
 <?php
 
 use App\Constants\Permissions;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\RevokePermissionFromRoleController;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Models\MicroSite;
 use App\Models\User;
 use Illuminate\Foundation\Application;
@@ -19,7 +18,6 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 })->name('home');
-
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
@@ -82,7 +80,5 @@ Route::middleware(['can:microsite_create'])->group(function () {
 
 Route::resource('categories', CategoryController::class)
     ->middleware(['auth', 'verified', 'can:microsite_create'])->names('categories');
-
-
 
 require __DIR__.'/auth.php';

@@ -11,6 +11,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
     use HasRoles;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -45,13 +46,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function getRole(int $id) : string {
+    public function getRole(int $id): string
+    {
 
         $user = User::query()->where('id', $id)->find($id);
 
-        if($user->hasRole('Admin')) {
+        if ($user->hasRole('Admin')) {
             return 'Admin';
-        } else if($user->hasRole('Customer')) {
+        } elseif ($user->hasRole('Customer')) {
             return 'Customer';
         }
 

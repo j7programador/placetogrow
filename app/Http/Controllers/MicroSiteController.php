@@ -5,24 +5,20 @@ namespace App\Http\Controllers;
 use App\Actions\MicroSites\DeleteAction;
 use App\Actions\MicroSites\StoreAction;
 use App\Actions\MicroSites\UpdateAction;
-use App\Constants\CategoryName;
 use App\Constants\CurrencyEnum;
 use App\Constants\DocumentTypeEnum;
 use App\Constants\Permissions;
 use App\Constants\TypeMicrositeEnum;
+use App\Http\Requests\UpdateMicroSiteRequest;
 use App\Models\Category;
 use App\Models\MicroSite;
-use App\Http\Requests\StoreMicroSiteRequest;
-use App\Http\Requests\UpdateMicroSiteRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Session\Store;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MicroSiteController extends Controller
 {
-
     public function index(): Response
     {
         return Inertia::render('MicroSites', [
@@ -36,8 +32,7 @@ class MicroSiteController extends Controller
         ]);
     }
 
-
-    public function create() : Response
+    public function create(): Response
     {
         return Inertia::render('Microsite/Create', [
             'documentTypes' => array_column(DocumentTypeEnum::cases(), 'name'),
@@ -49,14 +44,12 @@ class MicroSiteController extends Controller
         ]);
     }
 
-
     public function store(StoreAction $storeAction, Request $request): RedirectResponse
     {
-        $storeAction -> execute($storeAction, $request);
+        $storeAction->execute($storeAction, $request);
 
         return to_route('microsites.index')->with('success', 'Microsite created successfully.');
     }
-
 
     public function show(int $id): Response
     {
@@ -70,7 +63,6 @@ class MicroSiteController extends Controller
             'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
         ]);
     }
-
 
     public function edit(int $id): Response
     {
@@ -86,18 +78,18 @@ class MicroSiteController extends Controller
 
     }
 
-
     public function update(UpdateAction $updateAction, UpdateMicroSiteRequest $request, int $id): RedirectResponse
     {
         $updateAction->execute($request, $id);
+
         return to_route('microsites.index')->with('success', 'Micro Site updated successfully.');
 
     }
 
-
     public function destroy(int $id, DeleteAction $deleteAction): RedirectResponse
     {
         $deleteAction->execute($id);
+
         return to_route('microsites.index')->with('danger', 'Microsite deleted successfully');
     }
 
@@ -106,16 +98,16 @@ class MicroSiteController extends Controller
         $microsite = MicroSite::query()->where('slug', $slug)->first();
         $micrositeType = $microsite->type_microsite;
         $currencies = array_column(CurrencyEnum::cases(), 'name');
-        if($micrositeType == 'BASIC'){
-                return Inertia::render('Microsite/Basic', [
+        if ($micrositeType == 'BASIC') {
+            return Inertia::render('Microsite/Basic', [
                 'microSite' => $microsite,
                 'currencies' => $currencies,
             ]);
-        } else if($micrositeType == 'BILL'){
-                return Inertia::render('Microsite/Basic', [
-                    'microSite' => $microsite,
-                    'currencies' => $currencies,
-                ]);
+        } elseif ($micrositeType == 'BILL') {
+            return Inertia::render('Microsite/Basic', [
+                'microSite' => $microsite,
+                'currencies' => $currencies,
+            ]);
         }
 
         return Inertia::render('Microsite/Suscription', [
@@ -123,5 +115,4 @@ class MicroSiteController extends Controller
             'currencies' => $currencies,
         ]);
     }
-
 }
