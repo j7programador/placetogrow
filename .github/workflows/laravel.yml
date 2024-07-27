@@ -49,4 +49,6 @@ jobs:
 
       - name: Run Pint
         run: pint
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan --error-format=github
 
