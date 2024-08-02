@@ -30,4 +30,9 @@ class MicroSite extends Model
     {
         return 'slug';
     }
+
+    public function fields()
+    {
+        return $this->hasMany(Fields::class);
+    }
 }

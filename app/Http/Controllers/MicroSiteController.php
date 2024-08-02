@@ -7,6 +7,7 @@ use App\Actions\MicroSites\StoreAction;
 use App\Actions\MicroSites\UpdateAction;
 use App\Constants\CurrencyEnum;
 use App\Constants\DocumentTypeEnum;
+use App\Constants\PaymentGateway;
 use App\Constants\Permissions;
 use App\Constants\TypeMicrositeEnum;
 use App\Http\Requests\UpdateMicroSiteRequest;
@@ -98,21 +99,30 @@ class MicroSiteController extends Controller
         $microsite = MicroSite::query()->where('slug', $slug)->first();
         $micrositeType = $microsite->type_microsite;
         $currencies = array_column(CurrencyEnum::cases(), 'name');
+        $documentTypes = array_column(DocumentTypeEnum::cases(), 'name');
+        $gateways = array_column(PaymentGateway::cases(), 'value');
+
         if ($micrositeType == 'BASIC') {
             return Inertia::render('Microsite/Basic', [
                 'microSite' => $microsite,
                 'currencies' => $currencies,
+                'documentTypes' => $documentTypes,
+                'gateways' => $gateways,
             ]);
         } elseif ($micrositeType == 'BILL') {
             return Inertia::render('Microsite/Basic', [
                 'microSite' => $microsite,
                 'currencies' => $currencies,
+                'documentTypes' => $documentTypes,
+                'gateways' => $gateways,
             ]);
         }
 
         return Inertia::render('Microsite/Suscription', [
             'microSite' => $microsite,
             'currencies' => $currencies,
+            'documentTypes' => $documentTypes,
+            'gateways' => $gateways,
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Constants\Permissions;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Models\MicroSite;
@@ -80,5 +81,11 @@ Route::middleware(['can:microsite_create'])->group(function () {
 
 Route::resource('categories', CategoryController::class)
     ->middleware(['auth', 'verified', 'can:microsite_create'])->names('categories');
+
+Route::post('payments', [PaymentController::class, 'store'])
+    ->name('payments.store');
+
+Route::get('payments/{payment}', [PaymentController::class, 'show'])
+    ->name('payments.show');
 
 require __DIR__.'/auth.php';
