@@ -23,7 +23,7 @@ const submit = () => {
             console.error('An error occurred');
         },
         onSuccess: () => {
-            console.log('Microsite created successfully');
+            console.log('Category created successfully');
         }
     });
 };
