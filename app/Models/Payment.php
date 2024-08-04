@@ -17,8 +17,8 @@ class Payment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function microsite(): BelongsTo
+    public function site(): BelongsTo
     {
-        return $this->belongsTo(MicroSite::class);
+        return $this->belongsTo(Site::class);
     }
 }

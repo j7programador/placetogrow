@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use App\Constants\CurrencyEnum;
 use App\Constants\DocumentTypeEnum;
 use App\Constants\PaymentGateway;
+use App\Models\Fields;
+use App\Models\Site;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -17,17 +19,60 @@ class StorePaymentRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
-            'description' => ['required', 'string', 'min:3', 'max:100'],
-            'amount' => ['required', 'integer', 'min:1', 'max:999999999999'],
-            'microsite_id' => ['required', 'numeric', 'exists:micro_sites,id'],
-            'currency' => ['required', Rule::in(CurrencyEnum::toArray())],
-            'name' => ['required', 'string', 'min:3', 'max:20'],
-            'last_name' => ['required', 'string', 'min:3', 'max:20'],
-            'email' => ['required', 'string', 'email'],
-            'document_number' => ['required', 'numeric', 'digits_between:6,20'],
-            'document_type' => ['required', Rule::in(DocumentTypeEnum::toArray())],
-            'gateway' => ['required', Rule::in(PaymentGateway::toArray())],
-        ];
+        $request = $this->request;
+        $id = $request->get('site_id');
+        $site = Site::query()->where('id', $id)->find($id);
+        $site->load('fields');
+        $fields = $site->fields;
+        $rules = [];
+
+        foreach ($fields as $field) {
+            if ($field->enabled) {
+                $fieldRules = ['required'];
+                switch ($field->type) {
+                    case 'string':
+                        $fieldRules[] = 'string';
+                        break;
+                    case 'number':
+                        $fieldRules[] = 'numeric';
+                        break;
+                    case 'email':
+                        $fieldRules[] = 'email';
+                        break;
+                }
+
+                switch ($field->label) {
+                    case 'description':
+                        $fieldRules[] = 'min:3';
+                        $fieldRules[] = 'max:100';
+                        break;
+                    case 'amount':
+                        $fieldRules[] = 'min:1';
+                        $fieldRules[] = 'max:999999999999';
+                        break;
+                    case 'name':
+                    case 'last_name':
+                        $fieldRules[] = 'min:3';
+                        $fieldRules[] = 'max:20';
+                        break;
+                    case 'document_number':
+                        $fieldRules[] = 'digits_between:6,20';
+                        break;
+                    case 'currency':
+                        $fieldRules[] = Rule::in(CurrencyEnum::toArray());
+                        break;
+                    case 'document_type':
+                        $fieldRules[] = Rule::in(DocumentTypeEnum::toArray());
+                        break;
+                    case 'gateway':
+                        $fieldRules[] = Rule::in(PaymentGateway::toArray());
+                        break;
+                }
+
+                $rules[$field->label] = $fieldRules;
+            }
+        }
+
+        return $rules;
     }
 }

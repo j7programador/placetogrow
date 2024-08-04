@@ -22,7 +22,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('micro_sites');
+        Schema::dropIfExists('sites');
         Schema::dropIfExists('categories');
     }
 };

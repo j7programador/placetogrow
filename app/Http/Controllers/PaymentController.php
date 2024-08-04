@@ -7,6 +7,7 @@ use App\Contracts\PaymentService;
 use App\Http\Requests\StorePaymentRequest;
 use App\Models\Payment;
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 
@@ -14,34 +15,40 @@ class PaymentController extends Controller
 {
     public function store(StorePaymentRequest $request): \Illuminate\Http\JsonResponse
     {
-        $payment = new Payment;
-        $payment->reference = date('ymdHis').'-'.strtoupper(Str::random(4));
-        $payment->description = $request->description;
-        $payment->amount = $request->amount;
-        $payment->currency = $request->currency;
-        $payment->gateway = $request->gateway;
-        $payment->status = PaymentStatus::PENDING;
-        $payment->user()->associate(User::first());
-        $payment->microsite()->associate($request->microsite_id);
-        $payment->save();
+        try {
+            $payment = new Payment;
+            $payment->reference = date('ymdHis').'-'.strtoupper(Str::random(4));
+            $payment->description = $request->description;
+            $payment->amount = $request->amount;
+            $payment->currency = $request->currency;
+            $payment->gateway = $request->gateway;
+            $payment->status = PaymentStatus::PENDING;
+            $payment->user()->associate(User::first());
+            $payment->site()->associate($request->site_id);
+            $payment->save();
 
-        /** @var PaymentService $paymentService */
-        $paymentService = app(PaymentService::class, [
-            'payment' => $payment,
-            'gateway' => $request->gateway,
-        ]);
+            /** @var PaymentService $paymentService */
+            $paymentService = app(PaymentService::class, [
+                'payment' => $payment,
+                'gateway' => $request->gateway,
+            ]);
 
-        $response = $paymentService->create([
-            'name' => $request->name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'document_number' => $request->document_number,
-            'document_type' => $request->document_type,
-        ]);
+            $response = $paymentService->create([
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'document_number' => $request->document_number,
+                'document_type' => $request->document_type,
+            ]);
 
-        $url = $response->url;
+            $url = $response->url;
 
-        return response()->json(['url' => $url]);
+            return response()->json(['url' => $url]);
+
+        } catch(Exception) {
+
+            return response()->json(['message' => 'Error processing payment']);
+        }
     }
 
     public function show(Payment $payment): View
@@ -55,6 +62,7 @@ class PaymentController extends Controller
         if ($payment->status === PaymentStatus::PENDING->value) {
             $payment = $paymentService->query();
         }
+
 
         return view('payments.show', [
             'payment' => $payment,

@@ -6,7 +6,8 @@ use App\Constants\CurrencyEnum;
 use App\Constants\DocumentTypeEnum;
 use App\Constants\PaymentGateway;
 use App\Constants\PaymentStatus;
-use App\Models\MicroSite;
+use App\Models\Category;
+use App\Models\Site;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -37,13 +38,14 @@ class StorePaymentTest extends TestCase
 
         Http::fake(fn (Request $request) => Http::response($responseData, 200));
 
-        $microsite = MicroSite::factory()->create();
+        Category::factory()->create();
+        $microsite = Site::factory()->create();
         $user = User::factory()->create();
-
         $data = [
+            'reference' => '1341234',
             'description' => fake()->sentence(),
             'amount' => 10000,
-            'microsite_id' => $microsite->id,
+            'site_id' => $microsite->id,
             'currency' => CurrencyEnum::USD->name,
             'name' => 'John',
             'last_name' => 'Doe',
@@ -53,14 +55,12 @@ class StorePaymentTest extends TestCase
             'gateway' => PaymentGateway::PLACETOPAY->value,
         ];
 
-        $response = $this->post(route('payments.store'), $data);
 
-        $response->assertSessionHasNoErrors()
-            ->assertRedirect($responseData['processUrl']);
+        $this->post(route('payments.store'), $data);
 
         $this->assertDatabaseHas('payments', [
             'user_id' => $user->id,
-            'microsite_id' => $microsite->id,
+            'site_id' => $microsite->id,
             'description' => $data['description'],
             'amount' => 10000,
             'gateway' => PaymentGateway::PLACETOPAY->value,

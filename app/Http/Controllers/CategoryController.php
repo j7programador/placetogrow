@@ -7,7 +7,7 @@ use App\Actions\Categories\UpdateAction;
 use App\Constants\Permissions;
 use App\Http\Requests\UpdateMicroSiteRequest;
 use App\Models\Category;
-use App\Models\MicroSite;
+use App\Models\Site;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -67,7 +67,7 @@ class CategoryController extends Controller
     public function destroy(int $id): RedirectResponse
     {
 
-        $microsite = MicroSite::query()->where('category_id', $id)->first($id);
+        $microsite = Site::query()->where('category_id', $id)->first($id);
 
         if ($microsite != null) {
             return to_route('categories.index')->with('danger', 'There are microsites created with this category');

@@ -3,7 +3,7 @@
 namespace App\Actions\MicroSites;
 
 use App\Http\Requests\UpdateMicroSiteRequest;
-use App\Models\MicroSite;
+use App\Models\Site;
 
 class UpdateAction
 {
@@ -19,7 +19,7 @@ class UpdateAction
             'img_url' => 'nullable|url|max:500',
         ]);
 
-        $microSite = MicroSite::query()->where('id', $id)->first();
+        $microSite = Site::query()->where('id', $id)->first();
         $microSite->update($request->all());
 
     }

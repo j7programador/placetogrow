@@ -21,10 +21,10 @@ return new class extends Migration
             $table->enum('gateway', PaymentGateway::toArray());
             $table->unsignedInteger('process_identifier')->nullable();
 
-            $table->foreignId('microsite_id');
-            $table->foreign('microsite_id')
+            $table->foreignId('site_id');
+            $table->foreign('site_id')
                 ->references('id')
-                ->on('micro_sites');
+                ->on('sites');
 
             $table->foreignId('user_id');
             $table->foreign('user_id')

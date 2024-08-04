@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('microsite_id')->constrained()->onDelete('cascade');
+            $table->foreignId('site_id')->constrained()->onDelete('cascade');
             $table->string('label');
             $table->string('type');
             $table->boolean('enabled')->default(true);
+            $table->boolean('personal_info')->default(true);
             $table->timestamps();
         });
     }
