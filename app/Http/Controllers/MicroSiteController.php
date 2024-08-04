@@ -12,7 +12,9 @@ use App\Constants\Permissions;
 use App\Constants\TypeMicrositeEnum;
 use App\Http\Requests\UpdateMicroSiteRequest;
 use App\Models\Category;
-use App\Models\MicroSite;
+use App\Models\Payment;
+use App\Models\Site;
+use App\ViewModels\SiteViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -22,8 +24,9 @@ class MicroSiteController extends Controller
 {
     public function index(): Response
     {
+
         return Inertia::render('MicroSites', [
-            'microsites' => MicroSite::all(),
+            'microsites' => Site::all(),
             'canEdit' => auth()->user()->can(Permissions::MICROSITE_EDIT),
             'canCreate' => auth()->user()->can(Permissions::MICROSITE_CREATE),
             'canDelete' => auth()->user()->can(Permissions::MICROSITE_DELETE),
@@ -35,10 +38,10 @@ class MicroSiteController extends Controller
 
     public function create(): Response
     {
+        $viewModelSite = new SiteViewModel();
+
         return Inertia::render('Microsite/Create', [
-            'documentTypes' => array_column(DocumentTypeEnum::cases(), 'name'),
-            'categories' => Category::query()->select(['id', 'name'])->get(),
-            'micrositeTypes' => array_column(TypeMicrositeEnum::cases(), 'name'),
+            'viewMicrosite' => $viewModelSite,
             'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
             'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
             'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
@@ -54,10 +57,12 @@ class MicroSiteController extends Controller
 
     public function show(int $id): Response
     {
-        $microsite = MicroSite::query()->where('id', $id)->find($id);
+        $microsite = Site::query()->where('id', $id)->find($id);
+        $payments = Payment::query()->where('site_id', $id)->get();
 
         return Inertia::render('Microsite/View', [
             'microSite' => $microsite,
+            'payments' => $payments,
             'category' => Category::query()->where('id', $microsite->category_id)->find($microsite->category_id),
             'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
             'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
@@ -68,7 +73,7 @@ class MicroSiteController extends Controller
     public function edit(int $id): Response
     {
         return Inertia::render('Microsite/Edit', [
-            'microSite' => MicroSite::query()->where('id', $id)->find($id),
+            'microSite' => Site::query()->where('id', $id)->find($id),
             'documentTypes' => array_column(DocumentTypeEnum::cases(), 'name'),
             'categories' => Category::query()->select(['id', 'name'])->get(),
             'micrositeTypes' => array_column(TypeMicrositeEnum::cases(), 'name'),
@@ -96,7 +101,9 @@ class MicroSiteController extends Controller
 
     public function viewMicrosite(string $slug): Response
     {
-        $microsite = MicroSite::query()->where('slug', $slug)->first();
+        $microsite = Site::query()->where('slug', $slug)->first();
+        $microsite->load('fields');
+
         $micrositeType = $microsite->type_microsite;
         $currencies = array_column(CurrencyEnum::cases(), 'name');
         $documentTypes = array_column(DocumentTypeEnum::cases(), 'name');

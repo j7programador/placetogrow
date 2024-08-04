@@ -4,9 +4,9 @@ namespace App\Constants;
 
 enum CategoryName: string
 {
-    case BASIC = 'basic';
-    case INVOICING = 'invoicing';
-    case SUBSCRIPTIONS = 'subscriptions';
+    case BASIC = 'BASIC';
+    case INVOICING = 'INVOICING';
+    case SUBSCRIPTIONS = 'SUBSCRIPTIONS';
 
     public static function toArray(): array
     {

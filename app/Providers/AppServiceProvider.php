@@ -17,7 +17,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(PaymentServiceContract::class, function (Application $app, array $data) {
             ['payment' => $payment, 'gateway' => $gateway] = $data;
-
             $gateway = $app->make(PaymentGatewayContract::class, ['gateway' => $gateway]);
 
             return new PaymentService($payment, $gateway);

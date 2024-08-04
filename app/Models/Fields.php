@@ -9,10 +9,10 @@ class Fields extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['microsite_id', 'label', 'type', 'enabled'];
+    protected $fillable = ['microsite_id', 'label', 'type', 'enabled', 'personal_info'];
 
-    public function site()
+    public function microsite()
     {
-        return $this->belongsTo(MicroSite::class);
+        return $this->belongsTo(Site::class);
     }
 }

@@ -2,10 +2,12 @@
 
 use App\Constants\Permissions;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FieldsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
-use App\Models\MicroSite;
+use App\Models\Payment;
+use App\Models\Site;
 use App\Models\User;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -13,7 +15,7 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'microsites' => MicroSite::all(),
+        'microsites' => Site::all(),
         'canLogin' => Route::has('login'),
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
@@ -25,11 +27,12 @@ Route::get('/dashboard', function () {
         'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
         'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
         'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
-        'microsites' => MicroSite::count(),
+        'microsites' => Site::count(),
         'users' => User::count(),
-        'micrositesBasic' => Microsite::query()->where('type_microsite', 'BASIC')->count(),
-        'micrositesBill' => Microsite::query()->where('type_microsite', 'BILL')->count(),
-        'micrositesSuscription' => Microsite::query()->where('type_microsite', 'SUSCRIPTION')->count(),
+        'micrositesBasic' => Site::query()->where('type_microsite', 'BASIC')->count(),
+        'micrositesBill' => Site::query()->where('type_microsite', 'BILL')->count(),
+        'micrositesSuscription' => Site::query()->where('type_microsite', 'SUSCRIPTION')->count(),
+        'payments' => Payment::count(),
     ]);
 })->middleware(['auth', 'verified', 'can:dashboard-view'])->name('dashboard');
 
@@ -87,5 +90,9 @@ Route::post('payments', [PaymentController::class, 'store'])
 
 Route::get('payments/{payment}', [PaymentController::class, 'show'])
     ->name('payments.show');
+
+Route::middleware(['can:microsite_create'])->group(function () {
+    Route::resource('/fields', FieldsController::class);
+});
 
 require __DIR__.'/auth.php';

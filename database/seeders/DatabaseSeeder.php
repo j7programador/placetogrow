@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(CategorySeeder::class);
-        $this->call(MicroSiteSeeder::class);
+        $this->call(SiteSeeder::class);
         $this->call(RolesSeeder::class);
         $this->call(PermissionsSeeder::class);
         $this->call(DefaultRolesAndPermissionsSeeder::class);
