@@ -44,9 +44,12 @@ This project is developed with laravel and vue/inertiaJs for manage pay microsit
 3. Duplicate .env.example file and set your variables.
 4. Install project dependencies: `composer install`.
 5. Install project dependencies for inertia: `npm install`.
-6. Execute migration: `php artisan migrate`.
-7. Start server: `php artisan serve`.
-8. Start inertia : `npm run dev`.
+6. Execute migration: `php artisan migrate:refresh`.
+7. Create two users with command: `php artisan app:create-user {username} {userdomain} {password}`.
+8. Execute seeders: `php artisan db:seed`.
+9. Start server: `php artisan serve`.
+10. Start inertia : `npm run dev`.
+Can us change locale with command: `php artisan app:change-locale {locale}`.
 
 ## Tests:
 Run: `php artisan test`.
