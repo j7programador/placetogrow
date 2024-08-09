@@ -15,7 +15,7 @@ const form = useForm({
     role: '',
 });
 defineProps(
-    {roles: Array }
+    {roles: Array, name:String }
 )
 
 const submit = () => {
@@ -27,12 +27,14 @@ const submit = () => {
 
 <template>
     <AuthenticatedLayout>
-        <GuestLayout>
-            <Head title="Register" />
+
+        <Head title="Register" />
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Create User</h2>
 
             <form @submit.prevent="submit">
                 <div>
-                    <InputLabel for="name" value="Name" />
+                    <InputLabel for="name" :value="name" />
 
                     <TextInput
                         id="name"
@@ -106,6 +108,6 @@ const submit = () => {
                     </PrimaryButton>
                 </div>
             </form>
-        </GuestLayout>
+        </template>
     </AuthenticatedLayout>
 </template>

@@ -10,9 +10,7 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 defineProps(
-    {documentTypes: Array,
-           categories: Array,
-           micrositeTypes: Array},
+    {viewMicrosite: Object},
 );
 
 const form = useForm({
@@ -20,7 +18,7 @@ const form = useForm({
     name: '',
     document_type: '',
     document: '',
-    category: '',
+    category_id: '',
     type_microsite: '',
     img_url: ''
 });
@@ -90,7 +88,7 @@ const submit = () => {
                         <InputLabel for="document_type" value="Document type" />
                         <select class = "border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                 id="document_type" v-model="form.document_type" required>
-                            <option v-for="type in documentTypes" :key="type" :value="type">{{ type }}</option>
+                            <option v-for="type in viewMicrosite.documentTypes" :key="type" :value="type">{{ type }}</option>
                         </select>
                         <InputError class="mt-2" :message="form.errors.document_type" />
                     </div>
@@ -107,18 +105,18 @@ const submit = () => {
                     </div>
 
                     <div>
-                        <InputLabel for="category" value="Category" />
+                        <InputLabel for="category_id" value="Category" />
                         <select class = "border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                id="category" v-model="form.category" required>
-                            <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
+                                id="category" v-model="form.category_id" required>
+                            <option v-for="category in viewMicrosite.categories" :key="category" :value="category.id">{{ category.name }}</option>
                         </select>
-                        <InputError class="mt-2" :message="form.errors.category" />
+                        <InputError class="mt-2" :message="form.errors.category_id" />
                     </div>
                     <div>
                         <InputLabel for="type_microsite" value="Type" />
                         <select class = "border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
                                 id="category" v-model="form.type_microsite" required>
-                            <option v-for="type_microsite in micrositeTypes" :key="type_microsite" :value="type_microsite">{{ type_microsite }}</option>
+                            <option v-for="type_microsite in viewMicrosite.siteTypes" :key="type_microsite" :value="type_microsite">{{ type_microsite }}</option>
                         </select>
                         <InputError class="mt-2" :message="form.errors.category" />
                     </div>

@@ -21,7 +21,7 @@ const form = useForm({
     name: props.microSite.name,
     document_type: props.microSite.document_type,
     document: props.microSite.document,
-    category: props.microSite.category,
+    category_id: props.microSite.category_id,
     type_microsite: props.microSite.type_microsite,
     img_url: props.microSite.img_url || '',
 });
@@ -100,10 +100,10 @@ const submit = () => {
                     <div>
                         <InputLabel for="category" value="Category" />
                         <select class = "border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                id="category" v-model="form.category" required>
-                            <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
+                                id="category" v-model="form.category_id" required>
+                            <option v-for="category in categories" :key="category" :value="category.id">{{ category.name }}</option>
                         </select>
-                        <InputError class="mt-2" :message="form.errors.category" />
+                        <InputError class="mt-2" :message="form.errors.category_id" />
                     </div>
                     <div>
                         <InputLabel for="type_microsite" value="Type" />

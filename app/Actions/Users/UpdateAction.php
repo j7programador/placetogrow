@@ -14,5 +14,4 @@ class UpdateAction
         $user->syncRoles([]);
         $user->assignRole($request->role);
     }
-
 }

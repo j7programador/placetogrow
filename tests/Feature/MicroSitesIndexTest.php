@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Constants\Permissions;
-use App\Models\Category;
-use App\Models\MicroSite;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -38,7 +36,7 @@ class MicroSitesIndexTest extends TestCase
         }
         $user->assignRole('Admin');
         $response = $this->actingAs($user)
-                        ->get(route('microsites.index'));
+            ->get(route('microsites.index'));
 
         $response->assertOk();
     }

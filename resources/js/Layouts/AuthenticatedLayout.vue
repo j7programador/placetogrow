@@ -14,6 +14,40 @@ const page = usePage();
 
 <template>
     <div>
+        <div>
+            <div v-if="$page.props.flash.success" class="bg-green-400">
+                <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
+                    <div class="flex items-center justify-between flex-wrap">
+                        <div class="w-0 flex-1 flex items-center">
+                            <p class="ml-3 font-medium text-white truncate">
+                                <span class="md:hidden"> {{ $page.props.flash.success }} </span>
+                                <span class="hidden md:inline">
+                {{ $page.props.flash.success }}
+              </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div>
+                <div v-if="$page.props.flash.danger" class="bg-red-400">
+                    <div class="max-w-7xl mx-auto py-3 px-3 sm:px-6 lg:px-8">
+                        <div class="flex items-center justify-between flex-wrap">
+                            <div class="w-0 flex-1 flex items-center">
+                                <p class="ml-3 font-medium text-white truncate">
+                                    <span class="md:hidden"> {{ $page.props.flash.danger }} </span>
+                                    <span class="hidden md:inline">
+                {{ $page.props.flash.danger }}
+              </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
                 <!-- Primary Navigation Menu -->
@@ -22,7 +56,7 @@ const page = usePage();
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('microsites.index')">
+                                <Link :href="route('home')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
                                     />
@@ -39,6 +73,12 @@ const page = usePage();
                                     Microsites
                                 </NavLink>
                             </div>
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('categories.index')" :active="route().current('categories.index')">
+                                    Categories
+                                </NavLink>
+                            </div>
+
                             <div v-if="page.props.canViewUsers" class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('users.index')" :active="route().current('users.index')">
                                     Users
@@ -47,6 +87,11 @@ const page = usePage();
                             <div v-if="page.props.canViewRoles" class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('roles.index')" :active="route().current('roles.index')">
                                     Roles
+                                </NavLink>
+                            </div>
+                            <div v-if="page.props.canViewRoles" class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('fields.index')" :active="route().current('fields.index')">
+                                    Microsites Fields
                                 </NavLink>
                             </div>
                         </div>

@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class MicroSite extends Model
+class Site extends Model
 {
     use HasFactory;
 
@@ -14,13 +15,13 @@ class MicroSite extends Model
         'name',
         'document_type',
         'document',
-        'category',
+        'category_id',
         'type_microsite',
         'enabled_at',
         'img_url',
     ];
 
-    public function category(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
@@ -28,5 +29,10 @@ class MicroSite extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function fields()
+    {
+        return $this->hasMany(Fields::class);
     }
 }

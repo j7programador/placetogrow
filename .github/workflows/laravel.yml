@@ -9,6 +9,7 @@ on:
   pull_request:
     branches:
       - develop
+      - master
 jobs:
   test:
     name: run-test
@@ -42,4 +43,12 @@ jobs:
       - name: Run npm
         run: |
           npm install
+
+      - name: Install Pint
+        run: composer global require laravel/pint
+
+      - name: Run Pint
+        run: pint
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan --error-format=github
 

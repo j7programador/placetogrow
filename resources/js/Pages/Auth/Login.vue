@@ -14,6 +14,12 @@ defineProps({
     status: {
         type: String,
     },
+    email: {
+        type: String,
+    },
+    password: {
+        type: String,
+    },
 });
 
 const form = useForm({
@@ -39,7 +45,7 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" :value="email" />
 
                 <TextInput
                     id="email"
@@ -55,7 +61,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" :value="password" />
 
                 <TextInput
                     id="password"

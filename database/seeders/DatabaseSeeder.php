@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,21 +15,9 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('12345678'),
 
-        ]);
-
-        User::factory()->create([
-            'name' => 'Client User',
-            'email' => 'customer@example.com',
-            'password' => bcrypt('12345678'),
-
-        ]);
-
-        $this->call(MicroSiteSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(SiteSeeder::class);
         $this->call(RolesSeeder::class);
         $this->call(PermissionsSeeder::class);
         $this->call(DefaultRolesAndPermissionsSeeder::class);
