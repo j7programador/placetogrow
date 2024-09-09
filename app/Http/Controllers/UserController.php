@@ -14,7 +14,7 @@ use Inertia\Response;
 
 class UserController extends Controller
 {
-    public function index(Request $request): \Inertia\Response
+    public function index(Request $request): Response
     {
         return Inertia::render('Users', [
             'users' => User::all(),
@@ -33,12 +33,13 @@ class UserController extends Controller
         return Inertia::render('User/Edit', [
             'user' => User::query()->where('id', $id)->find($id),
             'roles' => Roles::toArray(),
-            'role' =>User::query()->where('id', $id)->find($id)->getRole($id),
+            'role' => User::query()->where('id', $id)->find($id)->getRole($id),
             'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
             'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
             'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
         ]);
     }
+
     public function update(int $id, UpdateAction $updateAction, Request $request): RedirectResponse
     {
         $request->validate([
@@ -50,9 +51,10 @@ class UserController extends Controller
         return to_route('users.index')->with('success', 'User updated successfully.');
     }
 
-    public function destroy(int $id, DeleteAction $deleteAction): \Illuminate\Http\RedirectResponse
+    public function destroy(int $id, DeleteAction $deleteAction): RedirectResponse
     {
         $deleteAction->execute($id);
+
         return to_route('users.index')->with('success', 'User deleted');
     }
 }

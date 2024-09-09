@@ -6,10 +6,8 @@ use App\Constants\Permissions;
 use App\Constants\Roles;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
@@ -23,12 +21,13 @@ class RegisteredUserController extends Controller
     public function create(): Response
     {
         return Inertia::render('Auth/Register', [
-                'canCreate' => auth()->user()->can(Permissions::MICROSITE_CREATE),
-                'roles' => Roles::toArray(),
-                'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
-                'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
-                'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
-            ]
+            'canCreate' => auth()->user()->can(Permissions::MICROSITE_CREATE),
+            'roles' => Roles::toArray(),
+            'name' => trans('auth.register.name'),
+            'canViewDashBoard' => auth()->user()->can(Permissions::DASHBOARD_VIEW),
+            'canViewUsers' => auth()->user()->can(Permissions::USER_VIEW),
+            'canViewRoles' => auth()->user()->can(Permissions::ROLE_VIEW),
+        ]
         );
     }
 
