@@ -94,6 +94,11 @@ const page = usePage();
                                     Microsites Fields
                                 </NavLink>
                             </div>
+                            <div v-if="page.props.canViewRoles" class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('subscriptionplan.index')" :active="route().current('subscriptionplan.index')">
+                                    Plans
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">

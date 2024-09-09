@@ -14,6 +14,7 @@ use App\Http\Requests\UpdateMicroSiteRequest;
 use App\Models\Category;
 use App\Models\Payment;
 use App\Models\Site;
+use App\Models\SubscriptionPlan;
 use App\ViewModels\SiteViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -103,7 +104,6 @@ class MicroSiteController extends Controller
     {
         $microsite = Site::query()->where('slug', $slug)->first();
         $microsite->load('fields');
-
         $micrositeType = $microsite->type_microsite;
         $currencies = array_column(CurrencyEnum::cases(), 'name');
         $documentTypes = array_column(DocumentTypeEnum::cases(), 'name');
@@ -125,8 +125,27 @@ class MicroSiteController extends Controller
             ]);
         }
 
+        return Inertia::render('Microsite/SubscriptionPlans', [
+            'microSite' => $microsite,
+            'subscriptionPlans' => SubscriptionPlan::query()->where('site_id', $microsite->id)->find($microsite),
+            'currencies' => $currencies,
+            'documentTypes' => $documentTypes,
+            'gateways' => $gateways,
+        ]);
+    }
+
+    public function viewMicrositeSubscription(string $slug, int $id): Response
+    {
+        $microsite = Site::query()->where('slug', $slug)->first();
+        $microsite->load('fields');
+        $subscriptionPlan = SubscriptionPlan::query()->where('id', $id)->find($id);
+        $currencies = array_column(CurrencyEnum::cases(), 'name');
+        $documentTypes = array_column(DocumentTypeEnum::cases(), 'name');
+        $gateways = array_column(PaymentGateway::cases(), 'value');
+
         return Inertia::render('Microsite/Suscription', [
             'microSite' => $microsite,
+            'plan' => $subscriptionPlan,
             'currencies' => $currencies,
             'documentTypes' => $documentTypes,
             'gateways' => $gateways,
