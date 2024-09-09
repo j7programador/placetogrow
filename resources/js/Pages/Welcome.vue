@@ -99,10 +99,11 @@ const Actions = "Actions";
                                         <div class="aspect-w-2 aspect-h-3">
                                             <img class="h-32 w-64 sm:h-50 sm:w-100 flex-none rounded-md bg-gray-50"
                                                  :src="microsite.img_url" alt="">
+                                            <p class="text-gray-600">{{microsite.type_microsite}}</p>
                                         </div>
                                     </Link>
                                 </MicrositeCard>
-                                <p class="text-gray-400">{{ microsite.name }}</p>
+                                <p class="text-gray-300">{{ microsite.name }}</p>
                             </div>
                         </div>
                     </section>

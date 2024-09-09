@@ -6,6 +6,8 @@ use App\Http\Controllers\FieldsController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\SubscriptionPlanController;
 use App\Models\Payment;
 use App\Models\Site;
 use App\Models\User;
@@ -66,6 +68,9 @@ Route::get('/microsites/{id}', [\App\Http\Controllers\MicroSiteController::class
 Route::get('/microsite/{slug}', [\App\Http\Controllers\MicroSiteController::class, 'viewMicrosite'])
     ->name('microsites.viewMicroSite');
 
+Route::get('/micrositeSubscription/{slug}/{id}', [\App\Http\Controllers\MicroSiteController::class, 'viewMicrositeSubscription'])
+    ->name('microsites.viewMicrositeSubscription');
+
 Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('users.index');
 
@@ -94,5 +99,17 @@ Route::get('payments/{payment}', [PaymentController::class, 'show'])
 Route::middleware(['can:microsite_create'])->group(function () {
     Route::resource('/fields', FieldsController::class);
 });
+
+Route::resource('subscriptionplan', SubscriptionPlanController::class)
+    ->middleware(['auth', 'verified', 'can:microsite_create'])->names('subscriptionplan');
+
+//Route::resource('subscription', SubscriptionController::class)
+  //  ->names('subscription');
+
+Route::post('subscription', [SubscriptionController::class, 'store'])
+    ->name('subscription.store');
+
+Route::get('subscription/{subscription}', [SubscriptionController::class, 'return'])
+    ->name('subscription.return');
 
 require __DIR__.'/auth.php';
