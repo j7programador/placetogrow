@@ -5,32 +5,32 @@ import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import axios from "axios";
 import { ref } from 'vue';
+import InputError from "@/Components/InputError.vue";
 
 const props = defineProps(
-    {microSite: Object, documentTypes: Array, gateways: Array}
+    {microSite: Object, documentTypes: Array, gateways: Array, plan: Object}
 );
 
-const form = useForm(
-    props.microSite.fields.reduce((acc, field) => {
-        acc[field.label] = '';
-        acc['site_id'] = props.microSite.id;
-        return acc;
-    }, {})
+const form = useForm({
+        reference: '',
+        email: '',
+        plan: props.plan,
+        microsite_id: props.microSite.id,
+}
 );
 
 let message = ref("");
 
 const submit = async () => {
     try {
-        console.log(form.data());
-        const response = await axios.post(route('payments.store'), form.data());
-
-        if (response.data.url) {
-            window.location.href = response.data.url;
-        } else {
-            message.value = response.data.message;
-            console.log(message);
-        }
+        form.post(route('subscription.store'), {
+            onError: () => {
+                console.error('An error occurred');
+            },
+            onSuccess: () => {
+                console.log('Microsite created successfully');
+            }
+        });
     } catch (error) {
         console.error('An error occurred', error);
     }
@@ -81,74 +81,43 @@ const formatLabel = (label) => {
         <div>
             <form @submit.prevent="submit" class="flex flex-col items-center space-y-6">
                 <div class="max-w-lg w-full bg-gray-700 p-8 rounded-lg shadow-md">
-                    <h2 class="text-xl font-bold mb-6 text-white">Buyer</h2>
-                    <div v-for="field in props.microSite.fields" :key="field.id">
+                    <h2 class="text-xl font-bold mb-6 text-white">Plan</h2>
+                        <div class="mb-4">
+                            <p class="block text-sm font-medium text-gray-300">
+                                {{ plan.name }}
+                            </p>
+                        </div>
+                        <div class="mb-4">
+                        <p class="block text-sm font-medium text-gray-300">
+                            {{plan.currency}} ${{ plan.amount }} {{plan.billing_cycle}}
+                        </p>
+                     </div>
 
-                        <div v-if="field.enabled && field.type !== 'selector' && field.personal_info" class="mb-4">
-                            <InputLabel :for="field.label" class="block text-sm font-medium text-gray-700">
-                                {{ formatLabel(field.label) }}
-                            </InputLabel>
-                            <TextInput :id="field.label" v-model="form[field.label]" :type="field.type"
-                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-                        </div>
-                        <div
-                            v-if="field.enabled && field.type === 'selector' && field.personal_info && field.label ==='document_type'"
-                            class="mb-4">
-                            <InputLabel :for="field.label" class="block text-sm font-medium text-gray-700">
-                                {{ formatLabel(field.label) }}
-                            </InputLabel>
-                            <select
-                                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                id="document_type" v-model="form[field.label]" required>
-                                <option v-for="type in documentTypes" :key="type" :value="type">{{ type }}</option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <div class="max-w-lg w-full bg-gray-700 p-8 rounded-lg shadow-md">
                     <h2 class="text-xl font-bold mb-6 text-white">Pay</h2>
-                    <div v-for="field in props.microSite.fields" :key="field.id">
+                        <div class="mb-4">
 
-                        <div v-if="field.enabled && field.type !== 'selector' && !field.personal_info" class="mb-4">
-                            <InputLabel :for="field.label" class="block text-sm font-medium text-gray-700">
-                                {{ formatLabel(field.label) }}
+                            <InputLabel for="reference" class="block text-sm font-medium text-gray-700">
+                                Reference
                             </InputLabel>
-                            <TextInput :id="field.label" v-model="form[field.label]" :type="field.type"
+                            <TextInput id="reference" v-model="form.reference" type="text"
                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
+                            <InputError class="mt-2" :message="form.errors.reference" />
                         </div>
+                        <div class="mb-4">
 
-                        <div
-                            v-if="field.enabled && field.type === 'selector' && !field.personal_info && field.label ==='currency'"
-                            class="mb-4">
-                            <InputLabel :for="field.label" class="block text-sm font-medium text-gray-700">
-                                {{ formatLabel(field.label) }}
+                            <InputLabel for="email" class="block text-sm font-medium text-gray-700">
+                                Email
                             </InputLabel>
-                            <select id="currency" v-model="form[field.label]" required
-                                    class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-                                <option value="COP">COP</option>
-                                <option value="USD">USD</option>
-                            </select>
+                            <TextInput id="email" v-model="form.email" type="email"
+                                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
+                            <InputError class="mt-2" :message="form.errors.email" />
                         </div>
-                        <div
-                            v-if="field.enabled && field.type === 'selector' && !field.personal_info && field.label ==='gateway'"
-                            class="mb-4">
-                            <InputLabel :for="field.label" class="block text-sm font-medium text-gray-700">
-                                {{ formatLabel(field.label) }}
-                            </InputLabel>
-                            <select
-                                class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm"
-                                id="gateway" v-model="form[field.label]" required>
-                                <option v-for="gateway in gateways" :key="gateway" :value="gateway">{{
-                                        gateway
-                                    }}
-                                </option>
-                            </select>
-                        </div>
-                    </div>
                 </div>
                 <div class="flex justify-end">
                     <button type="submit"
-                            class="px-3 py-2 text-white font-semibold bg-gray-500 hover:bg-indigo-700 rounded">Pay
+                            class="px-3 py-2 text-white font-semibold bg-gray-500 hover:bg-indigo-700 rounded">Subscribirse
                     </button>
                 </div>
             </form>

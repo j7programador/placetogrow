@@ -47,4 +47,9 @@ class SiteFactory extends Factory
             }
         });
     }
+
+    public function subscriptionType() : self
+    {
+        return $this->state(fn () => ['type_microsite' => TypeMicrositeEnum::SUSCRIPTION]);
+    }
 }
